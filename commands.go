@@ -152,9 +152,9 @@ func (c *Cmd) Bool(p BoolParam) *bool {
 
 	switch x := p.(type) {
 	case BoolOpt:
-		c.mkOpt(container.Container{Name: x.Name, Desc: x.Desc, EnvVar: x.EnvVar, HideValue: x.HideValue, Value: value, ValueSetByUser: x.SetByUser})
+		c.mkOpt(container.Container{Name: x.Name, Desc: x.Desc, EnvVar: x.EnvVar, HideValue: x.HideValue, Value: value, ValueSetByUser: x.SetByUser, Hidden: x.Hidden})
 	case BoolArg:
-		c.mkArg(container.Container{Name: x.Name, Desc: x.Desc, EnvVar: x.EnvVar, HideValue: x.HideValue, Value: value, ValueSetByUser: x.SetByUser})
+		c.mkArg(container.Container{Name: x.Name, Desc: x.Desc, EnvVar: x.EnvVar, HideValue: x.HideValue, Value: value, ValueSetByUser: x.SetByUser, Hidden: x.Hidden})
 	default:
 		panic(fmt.Sprintf("Unhandled param %v", p))
 	}
@@ -213,9 +213,9 @@ func (c *Cmd) StringPtr(into *string, p StringParam) {
 
 	switch x := p.(type) {
 	case StringOpt:
-		c.mkOpt(container.Container{Name: x.Name, Desc: x.Desc, EnvVar: x.EnvVar, HideValue: x.HideValue, Value: value, ValueSetByUser: x.SetByUser})
+		c.mkOpt(container.Container{Name: x.Name, Desc: x.Desc, EnvVar: x.EnvVar, HideValue: x.HideValue, Value: value, ValueSetByUser: x.SetByUser, Hidden: x.Hidden})
 	case StringArg:
-		c.mkArg(container.Container{Name: x.Name, Desc: x.Desc, EnvVar: x.EnvVar, HideValue: x.HideValue, Value: value, ValueSetByUser: x.SetByUser})
+		c.mkArg(container.Container{Name: x.Name, Desc: x.Desc, EnvVar: x.EnvVar, HideValue: x.HideValue, Value: value, ValueSetByUser: x.SetByUser, Hidden: x.Hidden})
 	default:
 		panic(fmt.Sprintf("Unhandled param %v", p))
 	}
@@ -253,9 +253,9 @@ func (c *Cmd) IntPtr(into *int, p IntParam) {
 
 	switch x := p.(type) {
 	case IntOpt:
-		c.mkOpt(container.Container{Name: x.Name, Desc: x.Desc, EnvVar: x.EnvVar, HideValue: x.HideValue, Value: value, ValueSetByUser: x.SetByUser})
+		c.mkOpt(container.Container{Name: x.Name, Desc: x.Desc, EnvVar: x.EnvVar, HideValue: x.HideValue, Value: value, ValueSetByUser: x.SetByUser, Hidden: x.Hidden})
 	case IntArg:
-		c.mkArg(container.Container{Name: x.Name, Desc: x.Desc, EnvVar: x.EnvVar, HideValue: x.HideValue, Value: value, ValueSetByUser: x.SetByUser})
+		c.mkArg(container.Container{Name: x.Name, Desc: x.Desc, EnvVar: x.EnvVar, HideValue: x.HideValue, Value: value, ValueSetByUser: x.SetByUser, Hidden: x.Hidden})
 	default:
 		panic(fmt.Sprintf("Unhandled param %v", p))
 	}
@@ -272,9 +272,9 @@ func (c *Cmd) Float64(p Float64Param) *float64 {
 
 	switch x := p.(type) {
 	case Float64Opt:
-		c.mkOpt(container.Container{Name: x.Name, Desc: x.Desc, EnvVar: x.EnvVar, HideValue: x.HideValue, Value: value, ValueSetByUser: x.SetByUser})
+		c.mkOpt(container.Container{Name: x.Name, Desc: x.Desc, EnvVar: x.EnvVar, HideValue: x.HideValue, Value: value, ValueSetByUser: x.SetByUser, Hidden: x.Hidden})
 	case Float64Arg:
-		c.mkArg(container.Container{Name: x.Name, Desc: x.Desc, EnvVar: x.EnvVar, HideValue: x.HideValue, Value: value, ValueSetByUser: x.SetByUser})
+		c.mkArg(container.Container{Name: x.Name, Desc: x.Desc, EnvVar: x.EnvVar, HideValue: x.HideValue, Value: value, ValueSetByUser: x.SetByUser, Hidden: x.Hidden})
 	default:
 		panic(fmt.Sprintf("Unhandled param %v", p))
 	}
@@ -333,9 +333,9 @@ func (c *Cmd) StringsPtr(into *[]string, p StringsParam) {
 
 	switch x := p.(type) {
 	case StringsOpt:
-		c.mkOpt(container.Container{Name: x.Name, Desc: x.Desc, EnvVar: x.EnvVar, HideValue: x.HideValue, Value: value, ValueSetByUser: x.SetByUser})
+		c.mkOpt(container.Container{Name: x.Name, Desc: x.Desc, EnvVar: x.EnvVar, HideValue: x.HideValue, Value: value, ValueSetByUser: x.SetByUser, Hidden: x.Hidden})
 	case StringsArg:
-		c.mkArg(container.Container{Name: x.Name, Desc: x.Desc, EnvVar: x.EnvVar, HideValue: x.HideValue, Value: value, ValueSetByUser: x.SetByUser})
+		c.mkArg(container.Container{Name: x.Name, Desc: x.Desc, EnvVar: x.EnvVar, HideValue: x.HideValue, Value: value, ValueSetByUser: x.SetByUser, Hidden: x.Hidden})
 	default:
 		panic(fmt.Sprintf("Unhandled param %v", p))
 	}
@@ -373,9 +373,9 @@ func (c *Cmd) IntsPtr(into *[]int, p IntsParam) {
 
 	switch x := p.(type) {
 	case IntsOpt:
-		c.mkOpt(container.Container{Name: x.Name, Desc: x.Desc, EnvVar: x.EnvVar, HideValue: x.HideValue, Value: value, ValueSetByUser: x.SetByUser})
+		c.mkOpt(container.Container{Name: x.Name, Desc: x.Desc, EnvVar: x.EnvVar, HideValue: x.HideValue, Value: value, ValueSetByUser: x.SetByUser, Hidden: x.Hidden})
 	case IntsArg:
-		c.mkArg(container.Container{Name: x.Name, Desc: x.Desc, EnvVar: x.EnvVar, HideValue: x.HideValue, Value: value, ValueSetByUser: x.SetByUser})
+		c.mkArg(container.Container{Name: x.Name, Desc: x.Desc, EnvVar: x.EnvVar, HideValue: x.HideValue, Value: value, ValueSetByUser: x.SetByUser, Hidden: x.Hidden})
 	default:
 		panic(fmt.Sprintf("Unhandled param %v", p))
 	}
@@ -413,9 +413,9 @@ func (c *Cmd) Floats64Ptr(into *[]float64, p Floats64Param) {
 
 	switch x := p.(type) {
 	case Floats64Opt:
-		c.mkOpt(container.Container{Name: x.Name, Desc: x.Desc, EnvVar: x.EnvVar, HideValue: x.HideValue, Value: value, ValueSetByUser: x.SetByUser})
+		c.mkOpt(container.Container{Name: x.Name, Desc: x.Desc, EnvVar: x.EnvVar, HideValue: x.HideValue, Value: value, ValueSetByUser: x.SetByUser, Hidden: x.Hidden})
 	case Floats64Arg:
-		c.mkArg(container.Container{Name: x.Name, Desc: x.Desc, EnvVar: x.EnvVar, HideValue: x.HideValue, Value: value, ValueSetByUser: x.SetByUser})
+		c.mkArg(container.Container{Name: x.Name, Desc: x.Desc, EnvVar: x.EnvVar, HideValue: x.HideValue, Value: value, ValueSetByUser: x.SetByUser, Hidden: x.Hidden})
 	default:
 		panic(fmt.Sprintf("Unhandled param %v", p))
 	}
