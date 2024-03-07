@@ -6,9 +6,9 @@ import (
 
 	"fmt"
 
-	"github.com/jawher/mow.cli/internal/container"
-	"github.com/jawher/mow.cli/internal/values"
 	"github.com/stretchr/testify/require"
+	"github.com/vkd/mow.cli/internal/container"
+	"github.com/vkd/mow.cli/internal/values"
 )
 
 func TestOptsMatcher(t *testing.T) {

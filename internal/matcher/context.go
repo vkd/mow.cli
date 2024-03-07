@@ -1,6 +1,6 @@
 package matcher
 
-import "github.com/jawher/mow.cli/internal/container"
+import "github.com/vkd/mow.cli/internal/container"
 
 // ParseContext holds the state of the arguments parsing, i.e. the encountered options and arguments values, etc.
 type ParseContext struct {

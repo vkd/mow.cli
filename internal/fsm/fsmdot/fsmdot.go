@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/jawher/mow.cli/internal/fsm"
+	"github.com/vkd/mow.cli/internal/fsm"
 )
 
 // Dot generates a graphviz dot representation of an FSM

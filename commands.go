@@ -7,11 +7,11 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	"github.com/jawher/mow.cli/internal/container"
-	"github.com/jawher/mow.cli/internal/flow"
-	"github.com/jawher/mow.cli/internal/fsm"
-	"github.com/jawher/mow.cli/internal/lexer"
-	"github.com/jawher/mow.cli/internal/parser"
+	"github.com/vkd/mow.cli/internal/container"
+	"github.com/vkd/mow.cli/internal/flow"
+	"github.com/vkd/mow.cli/internal/fsm"
+	"github.com/vkd/mow.cli/internal/lexer"
+	"github.com/vkd/mow.cli/internal/parser"
 )
 
 /*

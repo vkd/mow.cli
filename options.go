@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/jawher/mow.cli/internal/container"
-	"github.com/jawher/mow.cli/internal/values"
+	"github.com/vkd/mow.cli/internal/container"
+	"github.com/vkd/mow.cli/internal/values"
 )
 
 // BoolOpt describes a boolean option

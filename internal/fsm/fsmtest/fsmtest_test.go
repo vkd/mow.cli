@@ -3,9 +3,9 @@ package fsmtest
 import (
 	"testing"
 
-	"github.com/jawher/mow.cli/internal/fsm"
-	"github.com/jawher/mow.cli/internal/matcher"
 	"github.com/stretchr/testify/require"
+	"github.com/vkd/mow.cli/internal/fsm"
+	"github.com/vkd/mow.cli/internal/matcher"
 )
 
 func TestNopeMatcher(t *testing.T) {

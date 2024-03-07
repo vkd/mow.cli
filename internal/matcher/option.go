@@ -3,8 +3,8 @@ package matcher
 import (
 	"strings"
 
-	"github.com/jawher/mow.cli/internal/container"
-	"github.com/jawher/mow.cli/internal/values"
+	"github.com/vkd/mow.cli/internal/container"
+	"github.com/vkd/mow.cli/internal/values"
 )
 
 // NewOpt create an option matcher that can consume short and long options

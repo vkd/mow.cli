@@ -3,8 +3,8 @@ package matcher
 import (
 	"testing"
 
-	"github.com/jawher/mow.cli/internal/container"
 	"github.com/stretchr/testify/require"
+	"github.com/vkd/mow.cli/internal/container"
 )
 
 func TestNew(t *testing.T) {

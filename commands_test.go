@@ -12,8 +12,8 @@ import (
 
 	"fmt"
 
-	"github.com/jawher/mow.cli/internal/container"
-	"github.com/jawher/mow.cli/internal/flow"
+	"github.com/vkd/mow.cli/internal/container"
+	"github.com/vkd/mow.cli/internal/flow"
 )
 
 func okCmd(t *testing.T, spec string, init CmdInitializer, args []string) {

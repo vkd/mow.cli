@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/jawher/mow.cli"
+	"github.com/vkd/mow.cli"
 )
 
 // Declare your type
