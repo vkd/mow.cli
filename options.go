@@ -16,8 +16,6 @@ type BoolOpt struct {
 	Name string
 	// The option description as will be shown in help messages
 	Desc string
-	// A space separated list of environment variables names to be used to initialize this option
-	EnvVar string
 	// The option's initial value
 	Value bool
 	// A boolean to display or not the current value of the option in the help message
@@ -42,8 +40,6 @@ type StringOpt struct {
 	Name string
 	// The option description as will be shown in help messages
 	Desc string
-	// A space separated list of environment variables names to be used to initialize this option
-	EnvVar string
 	// The option's initial value
 	Value string
 	// A boolean to display or not the current value of the option in the help message
@@ -68,8 +64,6 @@ type IntOpt struct {
 	Name string
 	// The option description as will be shown in help messages
 	Desc string
-	// A space separated list of environment variables names to be used to initialize this option
-	EnvVar string
 	// The option's initial value
 	Value int
 	// A boolean to display or not the current value of the option in the help message
@@ -94,8 +88,6 @@ type Float64Opt struct {
 	Name string
 	// The option description as will be shown in help messages
 	Desc string
-	// A space separated list of environment variables names to be used to initialize this option
-	EnvVar string
 	// The option's initial value
 	Value float64
 	// A boolean to display or not the current value of the option in the help message
@@ -120,9 +112,6 @@ type StringsOpt struct {
 	Name string
 	// The option description as will be shown in help messages
 	Desc string
-	// A space separated list of environment variables names to be used to initialize this option.
-	// The env variable should contain a comma separated list of values
-	EnvVar string
 	// The option's initial value
 	Value []string
 	// A boolean to display or not the current value of the option in the help message
@@ -147,9 +136,6 @@ type IntsOpt struct {
 	Name string
 	// The option description as will be shown in help messages
 	Desc string
-	// A space separated list of environment variables names to be used to initialize this option.
-	// The env variable should contain a comma separated list of values
-	EnvVar string
 	// The option's initial value
 	Value []int
 	// A boolean to display or not the current value of the option in the help message
@@ -175,9 +161,6 @@ type Floats64Opt struct {
 	Name string
 	// The option description as will be shown in help messages
 	Desc string
-	// A space separated list of environment variables names to be used to initialize this option.
-	// The env variable should contain a comma separated list of values
-	EnvVar string
 	// The option's initial value
 	Value []float64
 	// A boolean to display or not the current value of the option in the help message
@@ -203,8 +186,6 @@ type VarOpt struct {
 	Name string
 	// The option description as will be shown in help messages
 	Desc string
-	// A space separated list of environment variables names to be used to initialize this option
-	EnvVar string
 	// A value implementing the flag.Value type (will hold the final value)
 	Value flag.Value
 	// A boolean to display or not the current value of the option in the help message
@@ -225,7 +206,6 @@ BoolOpt defines a boolean option on the command c named `name`, with an initial 
 The name is a space separated list of the option names *WITHOUT* the dashes, e.g. `f force` and *NOT* `-f --force`.
 The one letter names will then be called with a single dash (short option), the others with two (long options).
 
-
 The result should be stored in a variable (a pointer to a bool) which will be populated when the app is run and the call arguments get parsed
 */
 func (c *Cmd) BoolOpt(name string, value bool, desc string) *bool {
@@ -241,7 +221,6 @@ BoolOptPtr defines a bool option on the command c named `name`, with an initial 
 
 The name is a space separated list of the option names *WITHOUT* the dashes, e.g. `f force` and *NOT* `-f --force`.
 The one letter names will then be called with a single dash (short option), the others with two (long options).
-
 
 The into parameter points to a variable (a pointer to a int slice) which will be populated when the app is run and the call arguments get parsed
 */
@@ -259,7 +238,6 @@ StringOpt defines a string option on the command c named `name`, with an initial
 The name is a space separated list of the option names *WITHOUT* the dashes, e.g. `f force` and *NOT* `-f --force`.
 The one letter names will then be called with a single dash (short option), the others with two (long options).
 
-
 The result should be stored in a variable (a pointer to a string) which will be populated when the app is run and the call arguments get parsed
 */
 func (c *Cmd) StringOpt(name string, value string, desc string) *string {
@@ -275,7 +253,6 @@ StringOptPtr defines a string option on the command c named `name`, with an init
 
 The name is a space separated list of the option names *WITHOUT* the dashes, e.g. `f force` and *NOT* `-f --force`.
 The one letter names will then be called with a single dash (short option), the others with two (long options).
-
 
 The into parameter points to a variable (a pointer to a int slice) which will be populated when the app is run and the call arguments get parsed
 */
@@ -293,7 +270,6 @@ IntOpt defines an int option on the command c named `name`, with an initial valu
 The name is a space separated list of the option names *WITHOUT* the dashes, e.g. `f force` and *NOT* `-f --force`.
 The one letter names will then be called with a single dash (short option), the others with two (long options).
 
-
 The result should be stored in a variable (a pointer to an int) which will be populated when the app is run and the call arguments get parsed
 */
 func (c *Cmd) IntOpt(name string, value int, desc string) *int {
@@ -309,7 +285,6 @@ IntOptPtr defines a int option on the command c named `name`, with an initial va
 
 The name is a space separated list of the option names *WITHOUT* the dashes, e.g. `f force` and *NOT* `-f --force`.
 The one letter names will then be called with a single dash (short option), the others with two (long options).
-
 
 The into parameter points to a variable (a pointer to an int) which will be populated when the app is run and the call arguments get parsed
 */
@@ -327,7 +302,6 @@ Float64Opt defines an float64 option on the command c named `name`, with an init
 The name is a space separated list of the option names *WITHOUT* the dashes, e.g. `f force` and *NOT* `-f --force`.
 The one letter names will then be called with a single dash (short option), the others with two (long options).
 
-
 The result should be stored in a variable (a pointer to an float64) which will be populated when the app is run and the call arguments get parsed
 */
 func (c *Cmd) Float64Opt(name string, value float64, desc string) *float64 {
@@ -343,7 +317,6 @@ Float64OptPtr defines a float64 option on the command c named `name`, with an in
 
 The name is a space separated list of the option names *WITHOUT* the dashes, e.g. `f force` and *NOT* `-f --force`.
 The one letter names will then be called with a single dash (short option), the others with two (long options).
-
 
 The into parameter points to a variable (a pointer to a float64) which will be populated when the app is run and the call arguments get parsed
 */
@@ -361,7 +334,6 @@ StringsOpt defines a string slice option on the command c named `name`, with an 
 The name is a space separated list of the option names *WITHOUT* the dashes, e.g. `f force` and *NOT* `-f --force`.
 The one letter names will then be called with a single dash (short option), the others with two (long options).
 
-
 The result should be stored in a variable (a pointer to a string slice) which will be populated when the app is run and the call arguments get parsed
 */
 func (c *Cmd) StringsOpt(name string, value []string, desc string) *[]string {
@@ -377,7 +349,6 @@ StringsOptPtr defines a string slice option on the command c named `name`, with 
 
 The name is a space separated list of the option names *WITHOUT* the dashes, e.g. `f force` and *NOT* `-f --force`.
 The one letter names will then be called with a single dash (short option), the others with two (long options).
-
 
 The into parameter points to a variable (a pointer to a int slice) which will be populated when the app is run and the call arguments get parsed
 */
@@ -395,7 +366,6 @@ IntsOpt defines an int slice option on the command c named `name`, with an initi
 The name is a space separated list of the option names *WITHOUT* the dashes, e.g. `f force` and *NOT* `-f --force`.
 The one letter names will then be called with a single dash (short option), the others with two (long options).
 
-
 The result should be stored in a variable (a pointer to an int slice) which will be populated when the app is run and the call arguments get parsed
 */
 func (c *Cmd) IntsOpt(name string, value []int, desc string) *[]int {
@@ -411,7 +381,6 @@ IntsOptPtr defines a int slice option on the command c named `name`, with an ini
 
 The name is a space separated list of the option names *WITHOUT* the dashes, e.g. `f force` and *NOT* `-f --force`.
 The one letter names will then be called with a single dash (short option), the others with two (long options).
-
 
 The into parameter points to a variable (a pointer to a int slice) which will be populated when the app is run and the call arguments get parsed
 */
@@ -429,7 +398,6 @@ Floats64Opt defines an float64 slice option on the command c named `name`, with 
 The name is a space separated list of the option names *WITHOUT* the dashes, e.g. `f force` and *NOT* `-f --force`.
 The one letter names will then be called with a single dash (short option), the others with two (long options).
 
-
 The result should be stored in a variable (a pointer to an float64 slice) which will be populated when the app is run and the call arguments get parsed
 */
 func (c *Cmd) Floats64Opt(name string, value []float64, desc string) *[]float64 {
@@ -446,7 +414,6 @@ Floats64OptPtr defines a int slice option on the command c named `name`, with an
 The name is a space separated list of the option names *WITHOUT* the dashes, e.g. `f force` and *NOT* `-f --force`.
 The one letter names will then be called with a single dash (short option), the others with two (long options).
 
-
 The into parameter points to a variable (a pointer to a int slice) which will be populated when the app is run and the call arguments get parsed
 */
 func (c *Cmd) Floats64OptPtr(into *[]float64, name string, value []float64, desc string) {
@@ -462,7 +429,6 @@ VarOpt defines an option where the type and format is controlled by the develope
 
 The name is a space separated list of the option names *WITHOUT* the dashes, e.g. `f force` and *NOT* `-f --force`.
 The one letter names will then be called with a single dash (short option), the others with two (long options).
-
 
 The result will be stored in the value parameter (a value implementing the flag.Value interface) which will be populated when the app is run and the call arguments get parsed
 */
@@ -484,7 +450,6 @@ func mkOptStrs(optName string) []string {
 
 func (c *Cmd) mkOpt(opt container.Container) {
 	opt.DefaultValue = values.DefaultValue(opt.Value)
-	opt.ValueSetFromEnv = values.SetFromEnv(opt.Value, opt.EnvVar)
 
 	opt.Names = mkOptStrs(opt.Name)
 

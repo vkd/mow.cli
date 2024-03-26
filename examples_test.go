@@ -11,7 +11,7 @@ import (
 func Example_greet() {
 	app := cli.App("greet", "Greet")
 	app.Spec = "[NAME]"
-	name := app.String(cli.StringArg{Name: "NAME", Value: "stranger", Desc: "Your name", EnvVar: "USER"})
+	name := app.String(cli.StringArg{Name: "NAME", Value: "stranger", Desc: "Your name"})
 	app.Action = func() {
 		fmt.Printf("Hello %s\n", *name)
 	}

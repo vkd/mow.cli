@@ -78,7 +78,7 @@ func TestOptsMatcher(t *testing.T) {
 func TestOptsMatcherInfiniteLoop(t *testing.T) {
 	opts := options{
 		options: []*container.Container{
-			{Names: []string{"-g"}, Value: values.NewString(new(string), ""), ValueSetFromEnv: true},
+			{Names: []string{"-g"}, Value: values.NewString(new(string), "")},
 		},
 		index: map[string]*container.Container{},
 	}

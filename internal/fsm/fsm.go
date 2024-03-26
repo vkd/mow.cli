@@ -13,7 +13,6 @@ import (
 /*
 State is the basic building block in the FSM.
 A State can be final or not, and has transitions to other states
-
 */
 type State struct {
 	Terminal    bool
@@ -142,7 +141,6 @@ func fillContainers(containers map[*container.Container][]string) error {
 			}
 		}
 
-		con.ValueSetFromEnv = false
 		if con.ValueSetByUser != nil {
 			*con.ValueSetByUser = true
 		}

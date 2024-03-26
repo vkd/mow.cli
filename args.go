@@ -16,8 +16,6 @@ type BoolArg struct {
 	Name string
 	// The argument description as will be shown in help messages
 	Desc string
-	// A space separated list of environment variables names to be used to initialize this argument
-	EnvVar string
 	// The argument's initial value
 	Value bool
 	// A boolean to display or not the current value of the argument in the help message
@@ -41,8 +39,6 @@ type StringArg struct {
 	Name string
 	// The argument description as will be shown in help messages
 	Desc string
-	// A space separated list of environment variables names to be used to initialize this argument
-	EnvVar string
 	// The argument's initial value
 	Value string
 	// A boolean to display or not the current value of the argument in the help message
@@ -66,8 +62,6 @@ type IntArg struct {
 	Name string
 	// The argument description as will be shown in help messages
 	Desc string
-	// A space separated list of environment variables names to be used to initialize this argument
-	EnvVar string
 	// The argument's initial value
 	Value int
 	// A boolean to display or not the current value of the argument in the help message
@@ -91,8 +85,6 @@ type Float64Arg struct {
 	Name string
 	// The argument description as will be shown in help messages
 	Desc string
-	// A space separated list of environment variables names to be used to initialize this argument
-	EnvVar string
 	// The argument's initial value
 	Value float64
 	// A boolean to display or not the current value of the argument in the help message
@@ -116,9 +108,6 @@ type StringsArg struct {
 	Name string
 	// The argument description as will be shown in help messages
 	Desc string
-	// A space separated list of environment variables names to be used to initialize this argument.
-	// The env variable should contain a comma separated list of values
-	EnvVar string
 	// The argument's initial value
 	Value []string
 	// A boolean to display or not the current value of the argument in the help message
@@ -142,9 +131,6 @@ type IntsArg struct {
 	Name string
 	// The argument description as will be shown in help messages
 	Desc string
-	// A space separated list of environment variables names to be used to initialize this argument.
-	// The env variable should contain a comma separated list of values
-	EnvVar string
 	// The argument's initial value
 	Value []int
 	// A boolean to display or not the current value of the argument in the help message
@@ -168,9 +154,6 @@ type Floats64Arg struct {
 	Name string
 	// The argument description as will be shown in help messages
 	Desc string
-	// A space separated list of environment variables names to be used to initialize this argument.
-	// The env variable should contain a comma separated list of values
-	EnvVar string
 	// The argument's initial value
 	Value []float64
 	// A boolean to display or not the current value of the argument in the help message
@@ -195,8 +178,6 @@ type VarArg struct {
 	Name string
 	// The option description as will be shown in help messages
 	Desc string
-	// A space separated list of environment variables names to be used to initialize this option
-	EnvVar string
 	// A value implementing the flag.Value type (will hold the final value)
 	Value flag.Value
 	// A boolean to display or not the current value of the option in the help message
@@ -411,8 +392,6 @@ func (c *Cmd) mkArg(arg container.Container) {
 	}
 
 	arg.DefaultValue = values.DefaultValue(arg.Value)
-
-	arg.ValueSetFromEnv = values.SetFromEnv(arg.Value, arg.EnvVar)
 
 	c.args = append(c.args, &arg)
 	c.argsIdx[arg.Name] = &arg

@@ -30,7 +30,7 @@ func (o *opt) String() string {
 
 func (o *opt) Match(args []string, c *ParseContext) (bool, []string) {
 	if len(args) == 0 || c.RejectOptions {
-		return o.theOne.ValueSetFromEnv, args
+		return false, args
 	}
 
 	idx := 0
@@ -40,7 +40,7 @@ func (o *opt) Match(args []string, c *ParseContext) (bool, []string) {
 		case arg == "-":
 			idx++
 		case arg == "--":
-			return o.theOne.ValueSetFromEnv, args
+			return false, args
 		case strings.HasPrefix(arg, "--"):
 			matched, consumed, nargs := o.matchLongOpt(args, idx, c)
 
@@ -48,7 +48,7 @@ func (o *opt) Match(args []string, c *ParseContext) (bool, []string) {
 				return true, nargs
 			}
 			if consumed == 0 {
-				return o.theOne.ValueSetFromEnv, args
+				return false, args
 			}
 			idx += consumed
 
@@ -58,15 +58,15 @@ func (o *opt) Match(args []string, c *ParseContext) (bool, []string) {
 				return true, nargs
 			}
 			if consumed == 0 {
-				return o.theOne.ValueSetFromEnv, args
+				return false, args
 			}
 			idx += consumed
 
 		default:
-			return o.theOne.ValueSetFromEnv, args
+			return false, args
 		}
 	}
-	return o.theOne.ValueSetFromEnv, args
+	return false, args
 }
 
 func (o *opt) matchLongOpt(args []string, idx int, c *ParseContext) (bool, int, []string) {

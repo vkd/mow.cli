@@ -80,10 +80,8 @@ Or:
 The first version returns a new pointer to a value which will be populated when the app is run,
 whereas the second version will populate a pointer to an existing variable you specify.
 
-Two features, EnvVar and SetByUser, can be defined in the long-form struct
-method. EnvVar is a space separated list of environment variables used to
-initialize the option if a value is not provided by the user. When help messages
-are shown, the value of any environment variables will be displayed. SetByUser
+The feature, SetByUser, can be defined in the long-form struct
+method. SetByUser
 is a pointer to a boolean variable that is set to true if the user specified the
 value on the command line. This can be useful to determine if the value of the
 option was explicitly set by the user or set via the default value.
@@ -171,10 +169,8 @@ Or:
 The first version returns a new pointer to a value which will be populated when the app is run,
 whereas the second version will populate a pointer to an existing variable you specify.
 
-Two features, EnvVar and SetByUser, can be defined in the long-form struct
-method. EnvVar is a space separated list of environment variables used to
-initialize the argument if a value is not provided by the user. When help
-messages are shown, the value of any environment variables will be displayed.
+The feature, SetByUser, can be defined in the long-form struct
+method.
 SetByUser is a pointer to a boolean variable that is set to true if the user
 specified the value on the command line. This can be useful to determine if the
 value of the argument was explicitly set by the user or set via the default
@@ -662,8 +658,7 @@ it must implement the IsBoolFlag method that returns true:
 
 To make a custom type behave as a multi-valued option or argument, i.e. takes
 multiple values, it must implement the Clear method, which is called whenever
-the values list needs to be cleared, e.g. when the value was initially populated
-from an environment variable, and then explicitly set from the CLI:
+the values list needs to be cleared, e.g. when the value was initially populated, and then explicitly set from the CLI:
 
     type Durations []time.Duration
 

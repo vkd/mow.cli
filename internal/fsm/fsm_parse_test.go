@@ -34,14 +34,12 @@ func TestParseFillsContainers(t *testing.T) {
 		stringsSetByUser = false
 		stringsVar       []string
 		boolCon          = &container.Container{
-			Value:           values.NewBool(&boolVar, false),
-			ValueSetFromEnv: true,
-			ValueSetByUser:  &boolSetByUser,
+			Value:          values.NewBool(&boolVar, false),
+			ValueSetByUser: &boolSetByUser,
 		}
 		stringsCon = &container.Container{
-			Value:           values.NewStrings(&stringsVar, []string{"original", "value"}),
-			ValueSetFromEnv: true,
-			ValueSetByUser:  &stringsSetByUser,
+			Value:          values.NewStrings(&stringsVar, []string{"original", "value"}),
+			ValueSetByUser: &stringsSetByUser,
 		}
 	)
 	matchers := map[string]matcher.Matcher{
@@ -64,11 +62,9 @@ func TestParseFillsContainers(t *testing.T) {
 
 	require.NoError(t, err)
 
-	require.False(t, boolCon.ValueSetFromEnv)
 	require.True(t, boolSetByUser)
 	require.True(t, boolVar)
 
-	require.False(t, stringsCon.ValueSetFromEnv)
 	require.True(t, stringsSetByUser)
 	require.Equal(t, stringsVar, []string{"new", "value"})
 }

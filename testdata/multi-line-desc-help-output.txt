@@ -12,7 +12,7 @@ Arguments:
 Options:        
   -o, --opt     Option
                 does something
-                another line (env $XXX_TEST) (default "default")
+                another line (default "default")
   -f, --force   Force
                 does something
-                another line (env $YYY_TEST)
+                another line

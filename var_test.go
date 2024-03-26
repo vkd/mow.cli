@@ -5,8 +5,6 @@ import (
 	"testing"
 	"time"
 
-	"os"
-
 	"github.com/stretchr/testify/require"
 )
 
@@ -102,63 +100,4 @@ func TestVar(t *testing.T) {
 	require.Equal(t, Percent([]float64{0.1, 0.05}), percents)
 
 	require.True(t, ex, "Exec wasn't called")
-}
-
-func TestVarFromEnv(t *testing.T) {
-	os.Setenv("MOWCLI_DURATION", "1h2m3s")
-	os.Setenv("MOWCLI_ARG_PERCENTS", "25%, 1%")
-	os.Setenv("MOWCLI_OPT_PERCENTS", "90%, 42%")
-
-	duration := Duration(0)
-	argPercents := Percent{}
-	optPercents := Percent{}
-
-	app := App("var", "")
-	app.Spec = "-p... DURATION PERCENT..."
-
-	app.Var(VarArg{
-		Name:   "DURATION",
-		Value:  &duration,
-		EnvVar: "MOWCLI_DURATION",
-	})
-	app.Var(VarArg{
-		Name:   "PERCENT",
-		Value:  &argPercents,
-		EnvVar: "MOWCLI_ARG_PERCENTS",
-	})
-	app.Var(VarOpt{
-		Name:   "p",
-		Value:  &optPercents,
-		EnvVar: "MOWCLI_OPT_PERCENTS",
-	})
-
-	require.Equal(t, Duration(1*time.Hour+2*time.Minute+3*time.Second), duration)
-
-	require.Equal(t, Percent([]float64{0.25, 0.01}), argPercents)
-	require.Equal(t, Percent([]float64{0.9, 0.42}), optPercents)
-}
-
-func TestVarOverrideEnv(t *testing.T) {
-	os.Setenv("MOWCLI_PERCENTS", "25%, 1%")
-
-	percents := Percent{}
-
-	app := App("var", "")
-	app.Spec = "PERCENT..."
-	app.Var(VarArg{
-		Name:   "PERCENT",
-		Value:  &percents,
-		EnvVar: "MOWCLI_PERCENTS",
-	})
-
-	ex := false
-	app.Action = func() {
-		ex = true
-		require.Equal(t, Percent([]float64{0, 0.99}), percents)
-	}
-
-	require.NoError(t,
-		app.Run([]string{"var", "0%", "99%"}))
-
-	require.True(t, ex, "Action should have been called")
 }

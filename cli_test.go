@@ -7,7 +7,6 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"io/ioutil"
-	"os"
 	"reflect"
 	"testing"
 
@@ -867,12 +866,11 @@ func TestHelpMessage(t *testing.T) {
 	cases := []struct {
 		name     string
 		params   []string
-		env      map[string]string
 		exitCode int
 	}{
 		{name: "top-help", params: []string{"app", "-h"}},
 		{name: "top-help-i-user", params: []string{"app", "-i=5"}, exitCode: 2},
-		{name: "top-help-i-env", params: []string{"app"}, env: map[string]string{"INT1": "25"}, exitCode: 2},
+		{name: "top-help-i-env", params: []string{"app"}, exitCode: 2},
 		{name: "command1", params: []string{"app", "command1", "-h"}},
 		{name: "command2", params: []string{"app", "command2", "-h"}},
 		{name: "command3", params: []string{"app", "command3", "-h"}},
@@ -886,7 +884,6 @@ func TestHelpMessage(t *testing.T) {
 			t.Logf("case: %+v", cas)
 			var out, stdErr string
 			defer captureAndRestoreOutput(&out, &stdErr)()
-			defer setAndRestoreEnv(cas.env)()
 
 			exitCalled := false
 			defer exitShouldBeCalledWith(t, cas.exitCode, &exitCalled)()
@@ -895,46 +892,46 @@ func TestHelpMessage(t *testing.T) {
 			app.Spec = "[-bdsuikqs] [BOOL1 STR1 INT3...]"
 
 			// Options
-			app.Bool(BoolOpt{Name: "b bool1 u uuu", Value: false, EnvVar: "BOOL1", Desc: "Bool Option 1"})
-			app.Bool(BoolOpt{Name: "bool2", Value: true, EnvVar: " ", Desc: "Bool Option 2"})
-			app.Bool(BoolOpt{Name: "d", Value: true, EnvVar: "BOOL3", Desc: "Bool Option 3", HideValue: true})
+			app.Bool(BoolOpt{Name: "b bool1 u uuu", Value: false, Desc: "Bool Option 1"})
+			app.Bool(BoolOpt{Name: "bool2", Value: true, Desc: "Bool Option 2"})
+			app.Bool(BoolOpt{Name: "d", Value: true, Desc: "Bool Option 3", HideValue: true})
 
-			app.String(StringOpt{Name: "s str1", Value: "", EnvVar: "STR1", Desc: "String Option 1"})
+			app.String(StringOpt{Name: "s str1", Value: "", Desc: "String Option 1"})
 			app.String(StringOpt{Name: "str2", Value: "a value", Desc: "String Option 2"})
-			app.String(StringOpt{Name: "v", Value: "another value", EnvVar: "STR3", Desc: "String Option 3", HideValue: true})
+			app.String(StringOpt{Name: "v", Value: "another value", Desc: "String Option 3", HideValue: true})
 
-			app.Int(IntOpt{Name: "i int1", Value: 0, EnvVar: "INT1 ALIAS_INT1"})
-			app.Int(IntOpt{Name: "int2", Value: 1, EnvVar: "INT2", Desc: "Int Option 2"})
-			app.Int(IntOpt{Name: "k", Value: 1, EnvVar: "INT3", Desc: "Int Option 3", HideValue: true})
+			app.Int(IntOpt{Name: "i int1", Value: 0})
+			app.Int(IntOpt{Name: "int2", Value: 1, Desc: "Int Option 2"})
+			app.Int(IntOpt{Name: "k", Value: 1, Desc: "Int Option 3", HideValue: true})
 
-			app.Strings(StringsOpt{Name: "x strs1", Value: nil, EnvVar: "STRS1", Desc: "Strings Option 1"})
-			app.Strings(StringsOpt{Name: "strs2", Value: []string{"value1", "value2"}, EnvVar: "STRS2", Desc: "Strings Option 2"})
-			app.Strings(StringsOpt{Name: "z", Value: []string{"another value"}, EnvVar: "STRS3", Desc: "Strings Option 3", HideValue: true})
+			app.Strings(StringsOpt{Name: "x strs1", Value: nil, Desc: "Strings Option 1"})
+			app.Strings(StringsOpt{Name: "strs2", Value: []string{"value1", "value2"}, Desc: "Strings Option 2"})
+			app.Strings(StringsOpt{Name: "z", Value: []string{"another value"}, Desc: "Strings Option 3", HideValue: true})
 
-			app.Ints(IntsOpt{Name: "q ints1", Value: nil, EnvVar: "INTS1", Desc: "Ints Option 1"})
-			app.Ints(IntsOpt{Name: "ints2", Value: []int{1, 2, 3}, EnvVar: "INTS2", Desc: "Ints Option 2"})
-			app.Ints(IntsOpt{Name: "j", Value: []int{1}, EnvVar: "INTS3", Desc: "Ints Option 3", HideValue: true})
+			app.Ints(IntsOpt{Name: "q ints1", Value: nil, Desc: "Ints Option 1"})
+			app.Ints(IntsOpt{Name: "ints2", Value: []int{1, 2, 3}, Desc: "Ints Option 2"})
+			app.Ints(IntsOpt{Name: "j", Value: []int{1}, Desc: "Ints Option 3", HideValue: true})
 
 			// Args
-			app.Bool(BoolArg{Name: "BOOL1", Value: false, EnvVar: "BOOL1", Desc: "Bool Argument 1"})
+			app.Bool(BoolArg{Name: "BOOL1", Value: false, Desc: "Bool Argument 1"})
 			app.Bool(BoolArg{Name: "BOOL2", Value: true, Desc: "Bool Argument 2"})
-			app.Bool(BoolArg{Name: "BOOL3", Value: true, EnvVar: "BOOL3", Desc: "Bool Argument 3", HideValue: true})
+			app.Bool(BoolArg{Name: "BOOL3", Value: true, Desc: "Bool Argument 3", HideValue: true})
 
-			app.String(StringArg{Name: "STR1", Value: "", EnvVar: "STR1", Desc: "String Argument 1"})
-			app.String(StringArg{Name: "STR2", Value: "a value", EnvVar: "STR2", Desc: "String Argument 2"})
-			app.String(StringArg{Name: "STR3", Value: "another value", EnvVar: "STR3", Desc: "String Argument 3", HideValue: true})
+			app.String(StringArg{Name: "STR1", Value: "", Desc: "String Argument 1"})
+			app.String(StringArg{Name: "STR2", Value: "a value", Desc: "String Argument 2"})
+			app.String(StringArg{Name: "STR3", Value: "another value", Desc: "String Argument 3", HideValue: true})
 
-			app.Int(IntArg{Name: "INT1", Value: 0, EnvVar: "INT1", Desc: "Int Argument 1"})
-			app.Int(IntArg{Name: "INT2", Value: 1, EnvVar: "INT2", Desc: "Int Argument 2"})
-			app.Int(IntArg{Name: "INT3", Value: 1, EnvVar: "INT3", Desc: "Int Argument 3", HideValue: true})
+			app.Int(IntArg{Name: "INT1", Value: 0, Desc: "Int Argument 1"})
+			app.Int(IntArg{Name: "INT2", Value: 1, Desc: "Int Argument 2"})
+			app.Int(IntArg{Name: "INT3", Value: 1, Desc: "Int Argument 3", HideValue: true})
 
-			app.Strings(StringsArg{Name: "STRS1", Value: nil, EnvVar: "STRS1", Desc: "Strings Argument 1"})
-			app.Strings(StringsArg{Name: "STRS2", Value: []string{"value1", "value2"}, EnvVar: "STRS2"})
-			app.Strings(StringsArg{Name: "STRS3", Value: []string{"another value"}, EnvVar: "STRS3", Desc: "Strings Argument 3", HideValue: true})
+			app.Strings(StringsArg{Name: "STRS1", Value: nil, Desc: "Strings Argument 1"})
+			app.Strings(StringsArg{Name: "STRS2", Value: []string{"value1", "value2"}})
+			app.Strings(StringsArg{Name: "STRS3", Value: []string{"another value"}, Desc: "Strings Argument 3", HideValue: true})
 
-			app.Ints(IntsArg{Name: "INTS1", Value: nil, EnvVar: "INTS1", Desc: "Ints Argument 1"})
-			app.Ints(IntsArg{Name: "INTS2", Value: []int{1, 2, 3}, EnvVar: "INTS2", Desc: "Ints Argument 2"})
-			app.Ints(IntsArg{Name: "INTS3", Value: []int{1}, EnvVar: "INTS3", Desc: "Ints Argument 3", HideValue: true})
+			app.Ints(IntsArg{Name: "INTS1", Value: nil, Desc: "Ints Argument 1"})
+			app.Ints(IntsArg{Name: "INTS2", Value: []int{1, 2, 3}, Desc: "Ints Argument 2"})
+			app.Ints(IntsArg{Name: "INTS3", Value: []int{1}, Desc: "Ints Argument 3", HideValue: true})
 
 			app.Command("command1", "command1 description", func(cmd *Cmd) {})
 			app.Command("command2", "command2 description", func(cmd *Cmd) {})
@@ -1010,8 +1007,8 @@ func TestMultiLineDescInHelpMessage(t *testing.T) {
 	app.LongDesc = "Longer App Desc"
 	app.Spec = "[-o] ARG"
 
-	app.String(StringOpt{Name: "o opt", Value: "default", EnvVar: "XXX_TEST", Desc: "Option\ndoes something\n  another line"})
-	app.Bool(BoolOpt{Name: "f force", Value: false, EnvVar: "YYY_TEST", Desc: "Force\ndoes something\n  another line"})
+	app.String(StringOpt{Name: "o opt", Value: "default", Desc: "Option\ndoes something\n  another line"})
+	app.Bool(BoolOpt{Name: "f force", Value: false, Desc: "Force\ndoes something\n  another line"})
 	app.String(StringArg{Name: "ARG", Value: "", Desc: "Argument\nDescription\nMultiple\nLines"})
 
 	app.Action = func() {}
@@ -1211,8 +1208,7 @@ func TestOptSetByUser(t *testing.T) {
 		{
 			desc: "String Opt, not set by user, env value",
 			config: func(c *Cli, s *bool) {
-				os.Setenv("MOW_VALUE", "value")
-				c.String(StringOpt{Name: "f", EnvVar: "MOW_VALUE", SetByUser: s})
+				c.String(StringOpt{Name: "f", SetByUser: s})
 			},
 			args:     []string{"test"},
 			expected: false,
@@ -1238,8 +1234,7 @@ func TestOptSetByUser(t *testing.T) {
 		{
 			desc: "Bool Opt, not set by user, env value",
 			config: func(c *Cli, s *bool) {
-				os.Setenv("MOW_VALUE", "true")
-				c.Bool(BoolOpt{Name: "f", EnvVar: "MOW_VALUE", SetByUser: s})
+				c.Bool(BoolOpt{Name: "f", SetByUser: s})
 			},
 			args:     []string{"test"},
 			expected: false,
@@ -1265,8 +1260,7 @@ func TestOptSetByUser(t *testing.T) {
 		{
 			desc: "Int Opt, not set by user, env value",
 			config: func(c *Cli, s *bool) {
-				os.Setenv("MOW_VALUE", "33")
-				c.Int(IntOpt{Name: "f", EnvVar: "MOW_VALUE", SetByUser: s})
+				c.Int(IntOpt{Name: "f", SetByUser: s})
 			},
 			args:     []string{"test"},
 			expected: false,
@@ -1292,8 +1286,7 @@ func TestOptSetByUser(t *testing.T) {
 		{
 			desc: "Ints Opt, not set by user, env value",
 			config: func(c *Cli, s *bool) {
-				os.Setenv("MOW_VALUE", "11,22,33")
-				c.Ints(IntsOpt{Name: "f", EnvVar: "MOW_VALUE", SetByUser: s})
+				c.Ints(IntsOpt{Name: "f", SetByUser: s})
 			},
 			args:     []string{"test"},
 			expected: false,
@@ -1319,8 +1312,7 @@ func TestOptSetByUser(t *testing.T) {
 		{
 			desc: "Strings Opt, not set by user, env value",
 			config: func(c *Cli, s *bool) {
-				os.Setenv("MOW_VALUE", "a,b,c")
-				c.Strings(StringsOpt{Name: "f", EnvVar: "MOW_VALUE", SetByUser: s})
+				c.Strings(StringsOpt{Name: "f", SetByUser: s})
 			},
 			args:     []string{"test"},
 			expected: false,
@@ -1380,8 +1372,7 @@ func TestArgSetByUser(t *testing.T) {
 			desc: "String Arg, not set by user, env value",
 			config: func(c *Cli, s *bool) {
 				c.Spec = "[ARG]"
-				os.Setenv("MOW_VALUE", "value")
-				c.String(StringArg{Name: "ARG", EnvVar: "MOW_VALUE", SetByUser: s})
+				c.String(StringArg{Name: "ARG", SetByUser: s})
 			},
 			args:     []string{"test"},
 			expected: false,
@@ -1410,8 +1401,7 @@ func TestArgSetByUser(t *testing.T) {
 			desc: "Bool Arg, not set by user, env value",
 			config: func(c *Cli, s *bool) {
 				c.Spec = "[ARG]"
-				os.Setenv("MOW_VALUE", "true")
-				c.Bool(BoolArg{Name: "ARG", EnvVar: "MOW_VALUE", SetByUser: s})
+				c.Bool(BoolArg{Name: "ARG", SetByUser: s})
 			},
 			args:     []string{"test"},
 			expected: false,
@@ -1440,8 +1430,7 @@ func TestArgSetByUser(t *testing.T) {
 			desc: "Int Arg, not set by user, env value",
 			config: func(c *Cli, s *bool) {
 				c.Spec = "[ARG]"
-				os.Setenv("MOW_VALUE", "33")
-				c.Int(IntArg{Name: "ARG", EnvVar: "MOW_VALUE", SetByUser: s})
+				c.Int(IntArg{Name: "ARG", SetByUser: s})
 			},
 			args:     []string{"test"},
 			expected: false,
@@ -1470,8 +1459,7 @@ func TestArgSetByUser(t *testing.T) {
 			desc: "Ints Arg, not set by user, env value",
 			config: func(c *Cli, s *bool) {
 				c.Spec = "[ARG...]"
-				os.Setenv("MOW_VALUE", "11,22,33")
-				c.Ints(IntsArg{Name: "ARG", EnvVar: "MOW_VALUE", SetByUser: s})
+				c.Ints(IntsArg{Name: "ARG", SetByUser: s})
 			},
 			args:     []string{"test"},
 			expected: false,
@@ -1500,8 +1488,7 @@ func TestArgSetByUser(t *testing.T) {
 			desc: "Strings Arg, not set by user, env value",
 			config: func(c *Cli, s *bool) {
 				c.Spec = "[ARG...]"
-				os.Setenv("MOW_VALUE", "a,b,c")
-				c.Strings(StringsArg{Name: "ARG", EnvVar: "MOW_VALUE", SetByUser: s})
+				c.Strings(StringsArg{Name: "ARG", SetByUser: s})
 			},
 			args:     []string{"test"},
 			expected: false,
@@ -1539,529 +1526,6 @@ func TestArgSetByUser(t *testing.T) {
 		})
 	}
 
-}
-
-func TestOptSetByEnv(t *testing.T) {
-	cases := []struct {
-		desc     string
-		config   func(*Cli) interface{}
-		args     []string
-		expected interface{}
-	}{
-		// OPTS
-		// String
-		{
-			desc: "String Opt, empty env var",
-			config: func(c *Cli) interface{} {
-				os.Setenv("MOW_VALUE", "")
-				return c.String(StringOpt{Name: "f", Value: "default", EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test"},
-			expected: "default",
-		},
-		{
-			desc: "String Opt, env set, not set by user",
-			config: func(c *Cli) interface{} {
-				os.Setenv("MOW_VALUE", "env")
-				return c.String(StringOpt{Name: "f", Value: "default", EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test"},
-			expected: "env",
-		},
-		{
-			desc: "String Opt, env set, set by user",
-			config: func(c *Cli) interface{} {
-				os.Setenv("MOW_VALUE", "env")
-				return c.String(StringOpt{Name: "f", Value: "default", EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test", "-f=user"},
-			expected: "user",
-		},
-
-		// Bool
-		{
-			desc: "Bool Opt, empty env var",
-			config: func(c *Cli) interface{} {
-				os.Setenv("MOW_VALUE", "")
-				return c.Bool(BoolOpt{Name: "f", Value: true, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test"},
-			expected: true,
-		},
-		{
-			desc: "Bool Opt, env set, not set by user",
-			config: func(c *Cli) interface{} {
-				os.Setenv("MOW_VALUE", "true")
-				return c.Bool(BoolOpt{Name: "f", Value: false, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test"},
-			expected: true,
-		},
-		{
-			desc: "Bool Opt, multi env set, not set by user",
-			config: func(c *Cli) interface{} {
-				os.Setenv("MOW_VALUE1", "xxx")
-				os.Setenv("MOW_VALUE2", "true")
-				return c.Bool(BoolOpt{Name: "f", Value: false, EnvVar: "MOW_VALUE1 MOW_VALUE2"})
-			},
-			args:     []string{"test"},
-			expected: true,
-		},
-		{
-			desc: "Bool Opt, env set bad value, not set by user",
-			config: func(c *Cli) interface{} {
-				os.Setenv("MOW_VALUE", "xxx")
-				return c.Bool(BoolOpt{Name: "f", Value: true, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test"},
-			expected: true,
-		},
-		{
-			desc: "Bool Opt, env set, set by user",
-			config: func(c *Cli) interface{} {
-				os.Setenv("MOW_VALUE", "false")
-				return c.Bool(BoolOpt{Name: "f", Value: false, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test", "-f"},
-			expected: true,
-		},
-
-		// Int
-		{
-			desc: "Int Opt, empty env var",
-			config: func(c *Cli) interface{} {
-				os.Setenv("MOW_VALUE", "")
-				return c.Int(IntOpt{Name: "f", Value: 42, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test"},
-			expected: 42,
-		},
-		{
-			desc: "Int Opt, env set, not set by user",
-			config: func(c *Cli) interface{} {
-				os.Setenv("MOW_VALUE", "42")
-				return c.Int(IntOpt{Name: "f", Value: 17, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test"},
-			expected: 42,
-		},
-		{
-			desc: "Int Opt, multi env set, not set by user",
-			config: func(c *Cli) interface{} {
-				os.Setenv("MOW_VALUE1", "xxx")
-				os.Setenv("MOW_VALUE2", "42")
-				return c.Int(IntOpt{Name: "f", Value: 17, EnvVar: "MOW_VALUE1 MOW_VALUE2"})
-			},
-			args:     []string{"test"},
-			expected: 42,
-		},
-		{
-			desc: "Int Opt, env set bad value, not set by user",
-			config: func(c *Cli) interface{} {
-				os.Setenv("MOW_VALUE", "xxx")
-				return c.Int(IntOpt{Name: "f", Value: 42, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test"},
-			expected: 42,
-		},
-		{
-			desc: "Int Opt, env set, set by user",
-			config: func(c *Cli) interface{} {
-				os.Setenv("MOW_VALUE", "42")
-				return c.Int(IntOpt{Name: "f", Value: 17, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test", "-f=72"},
-			expected: 72,
-		},
-
-		// Strings
-		{
-			desc: "Strings Opt, empty env var",
-			config: func(c *Cli) interface{} {
-				os.Setenv("MOW_VALUE", "")
-				return c.Strings(StringsOpt{Name: "f", Value: []string{"oh", "ai"}, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test"},
-			expected: []string{"oh", "ai"},
-		},
-		{
-			desc: "Strings Opt, env set, not set by user",
-			config: func(c *Cli) interface{} {
-				os.Setenv("MOW_VALUE", "do, re, mi")
-				return c.Strings(StringsOpt{Name: "f", Value: []string{"oh", "ai"}, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test"},
-			expected: []string{"do", "re", "mi"},
-		},
-		{
-			desc: "Strings Opt, multi env set, not set by user",
-			config: func(c *Cli) interface{} {
-				os.Setenv("MOW_VALUE1", "")
-				os.Setenv("MOW_VALUE2", "do, re, mi")
-				return c.Strings(StringsOpt{Name: "f", Value: []string{"oh", "ai"}, EnvVar: "MOW_VALUE1 MOW_VALUE2"})
-			},
-			args:     []string{"test"},
-			expected: []string{"do", "re", "mi"},
-		},
-		{
-			desc: "Strings Opt, env set, set by user",
-			config: func(c *Cli) interface{} {
-				os.Setenv("MOW_VALUE", "do, re")
-				c.Spec = "-f..."
-				return c.Strings(StringsOpt{Name: "f", Value: []string{"oh", "ai"}, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test", "-f=mi", "-f=fa"},
-			expected: []string{"mi", "fa"},
-		},
-
-		// Ints
-		{
-			desc: "Ints Opt, empty env var",
-			config: func(c *Cli) interface{} {
-				os.Setenv("MOW_VALUE", "")
-				return c.Ints(IntsOpt{Name: "f", Value: []int{1, 2}, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test"},
-			expected: []int{1, 2},
-		},
-		{
-			desc: "Ints Opt, env set, not set by user",
-			config: func(c *Cli) interface{} {
-				os.Setenv("MOW_VALUE", "11, 13, 17")
-				return c.Ints(IntsOpt{Name: "f", Value: []int{1, 2}, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test"},
-			expected: []int{11, 13, 17},
-		},
-		{
-			desc: "Ints Opt, multi env set, not set by user",
-			config: func(c *Cli) interface{} {
-				os.Setenv("MOW_VALUE1", "10, 20, xxx")
-				os.Setenv("MOW_VALUE2", "11, 13, 17")
-				return c.Ints(IntsOpt{Name: "f", Value: []int{1, 2}, EnvVar: "MOW_VALUE1 MOW_VALUE2"})
-			},
-			args:     []string{"test"},
-			expected: []int{11, 13, 17},
-		},
-		{
-			desc: "Ints Opt, env set bad value, not set by user",
-			config: func(c *Cli) interface{} {
-				os.Setenv("MOW_VALUE", "xxx")
-				return c.Ints(IntsOpt{Name: "f", Value: []int{1, 2}, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test"},
-			expected: []int(nil), //TODO: this is bad and you should feel bad
-		},
-		{
-			desc: "Ints Opt, env set, set by user",
-			config: func(c *Cli) interface{} {
-				os.Setenv("MOW_VALUE", "42")
-				c.Spec = "-f..."
-				return c.Ints(IntsOpt{Name: "f", Value: []int{1, 2}, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test", "-f=5", "-f=7"},
-			expected: []int{5, 7},
-		},
-	}
-
-	for _, cas := range cases {
-		t.Run(cas.desc, func(t *testing.T) {
-			t.Log(cas.desc)
-
-			app := App("test", "")
-
-			pointer := cas.config(app)
-
-			called := false
-			app.Action = func() {
-				called = true
-			}
-
-			require.NoError(t,
-				app.Run(cas.args))
-
-			typ := reflect.TypeOf(pointer)
-			if typ.Kind() != reflect.Ptr {
-				t.Fatalf("config func did not return a pointer")
-			}
-			actualValue := reflect.ValueOf(pointer).Elem().Interface()
-
-			require.True(t, called, "action should have been called")
-			require.Equal(t, cas.expected, actualValue)
-		})
-	}
-}
-
-func TestArgSetByEnv(t *testing.T) {
-	cases := []struct {
-		desc     string
-		config   func(*Cli) interface{}
-		args     []string
-		expected interface{}
-	}{
-		// ARGs
-		// String
-		{
-			desc: "String Arg, empty env var",
-			config: func(c *Cli) interface{} {
-				c.Spec = "[ARG]"
-				os.Setenv("MOW_VALUE", "")
-				return c.String(StringArg{Name: "ARG", Value: "default", EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test"},
-			expected: "default",
-		},
-		{
-			desc: "String Arg, env set, not set by user",
-			config: func(c *Cli) interface{} {
-				c.Spec = "[ARG]"
-				os.Setenv("MOW_VALUE", "env")
-				return c.String(StringArg{Name: "ARG", Value: "default", EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test"},
-			expected: "env",
-		},
-		{
-			desc: "String Arg, env set, set by user",
-			config: func(c *Cli) interface{} {
-				c.Spec = "[ARG]"
-				os.Setenv("MOW_VALUE", "env")
-				return c.String(StringArg{Name: "ARG", Value: "default", EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test", "user"},
-			expected: "user",
-		},
-
-		// Bool
-		{
-			desc: "Bool Arg, empty env var",
-			config: func(c *Cli) interface{} {
-				c.Spec = "[ARG]"
-				os.Setenv("MOW_VALUE", "")
-				return c.Bool(BoolArg{Name: "ARG", Value: true, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test"},
-			expected: true,
-		},
-		{
-			desc: "Bool Arg, env set, not set by user",
-			config: func(c *Cli) interface{} {
-				c.Spec = "[ARG]"
-				os.Setenv("MOW_VALUE", "true")
-				return c.Bool(BoolArg{Name: "ARG", Value: false, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test"},
-			expected: true,
-		},
-		{
-			desc: "Bool Arg, multi env set, not set by user",
-			config: func(c *Cli) interface{} {
-				c.Spec = "[ARG]"
-				os.Setenv("MOW_VALUE1", "xxx")
-				os.Setenv("MOW_VALUE2", "true")
-				return c.Bool(BoolArg{Name: "ARG", Value: false, EnvVar: "MOW_VALUE1 MOW_VALUE2"})
-			},
-			args:     []string{"test"},
-			expected: true,
-		},
-		{
-			desc: "Bool Arg, env set bad value, not set by user",
-			config: func(c *Cli) interface{} {
-				c.Spec = "[ARG]"
-				os.Setenv("MOW_VALUE", "xxx")
-				return c.Bool(BoolArg{Name: "ARG", Value: true, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test"},
-			expected: true,
-		},
-		{
-			desc: "Bool Arg, env set, set by user",
-			config: func(c *Cli) interface{} {
-				c.Spec = "[ARG]"
-				os.Setenv("MOW_VALUE", "false")
-				return c.Bool(BoolArg{Name: "ARG", Value: false, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test", "TRUE"},
-			expected: true,
-		},
-
-		// Int
-		{
-			desc: "Int Arg, empty env var",
-			config: func(c *Cli) interface{} {
-				c.Spec = "[ARG]"
-				os.Setenv("MOW_VALUE", "")
-				return c.Int(IntArg{Name: "ARG", Value: 42, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test"},
-			expected: 42,
-		},
-		{
-			desc: "Int Arg, env set, not set by user",
-			config: func(c *Cli) interface{} {
-				c.Spec = "[ARG]"
-				os.Setenv("MOW_VALUE", "42")
-				return c.Int(IntArg{Name: "ARG", Value: 17, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test"},
-			expected: 42,
-		},
-		{
-			desc: "Int Arg, multi env set, not set by user",
-			config: func(c *Cli) interface{} {
-				c.Spec = "[ARG]"
-				os.Setenv("MOW_VALUE1", "xxx")
-				os.Setenv("MOW_VALUE2", "42")
-				return c.Int(IntArg{Name: "ARG", Value: 17, EnvVar: "MOW_VALUE1 MOW_VALUE2"})
-			},
-			args:     []string{"test"},
-			expected: 42,
-		},
-		{
-			desc: "Int Arg, env set bad value, not set by user",
-			config: func(c *Cli) interface{} {
-				c.Spec = "[ARG]"
-				os.Setenv("MOW_VALUE", "xxx")
-				return c.Int(IntArg{Name: "ARG", Value: 42, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test"},
-			expected: 42,
-		},
-		{
-			desc: "Int Arg, env set, set by user",
-			config: func(c *Cli) interface{} {
-				c.Spec = "[ARG]"
-				os.Setenv("MOW_VALUE", "42")
-				return c.Int(IntArg{Name: "ARG", Value: 17, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test", "72"},
-			expected: 72,
-		},
-
-		// Strings
-		{
-			desc: "Strings Arg, empty env var",
-			config: func(c *Cli) interface{} {
-				c.Spec = "[ARG]"
-				os.Setenv("MOW_VALUE", "")
-				return c.Strings(StringsArg{Name: "ARG", Value: []string{"oh", "ai"}, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test"},
-			expected: []string{"oh", "ai"},
-		},
-		{
-			desc: "Strings Arg, env set, not set by user",
-			config: func(c *Cli) interface{} {
-				c.Spec = "[ARG]"
-				os.Setenv("MOW_VALUE", "do, re, mi")
-				return c.Strings(StringsArg{Name: "ARG", Value: []string{"oh", "ai"}, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test"},
-			expected: []string{"do", "re", "mi"},
-		},
-		{
-			desc: "Strings Arg, multi env set, not set by user",
-			config: func(c *Cli) interface{} {
-				c.Spec = "[ARG]"
-				os.Setenv("MOW_VALUE1", "")
-				os.Setenv("MOW_VALUE2", "do, re, mi")
-				return c.Strings(StringsArg{Name: "ARG", Value: []string{"oh", "ai"}, EnvVar: "MOW_VALUE1 MOW_VALUE2"})
-			},
-			args:     []string{"test"},
-			expected: []string{"do", "re", "mi"},
-		},
-		{
-			desc: "Strings Arg, env set, set by user",
-			config: func(c *Cli) interface{} {
-				c.Spec = "ARG..."
-				os.Setenv("MOW_VALUE", "do, re")
-				return c.Strings(StringsArg{Name: "ARG", Value: []string{"oh", "ai"}, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test", "mi", "fa"},
-			expected: []string{"mi", "fa"},
-		},
-
-		// Ints
-		{
-			desc: "Ints Arg, empty env var",
-			config: func(c *Cli) interface{} {
-				c.Spec = "[ARG]"
-				os.Setenv("MOW_VALUE", "")
-				return c.Ints(IntsArg{Name: "ARG", Value: []int{1, 2}, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test"},
-			expected: []int{1, 2},
-		},
-		{
-			desc: "Ints Arg, env set, not set by user",
-			config: func(c *Cli) interface{} {
-				c.Spec = "[ARG]"
-				os.Setenv("MOW_VALUE", "11, 13, 17")
-				return c.Ints(IntsArg{Name: "ARG", Value: []int{1, 2}, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test"},
-			expected: []int{11, 13, 17},
-		},
-		{
-			desc: "Ints Arg, multi env set, not set by user",
-			config: func(c *Cli) interface{} {
-				c.Spec = "[ARG]"
-				os.Setenv("MOW_VALUE1", "10, 20, xxx")
-				os.Setenv("MOW_VALUE2", "11, 13, 17")
-				return c.Ints(IntsArg{Name: "ARG", Value: []int{1, 2}, EnvVar: "MOW_VALUE1 MOW_VALUE2"})
-			},
-			args:     []string{"test"},
-			expected: []int{11, 13, 17},
-		},
-		{
-			desc: "Ints Arg, env set bad value, not set by user",
-			config: func(c *Cli) interface{} {
-				c.Spec = "[ARG]"
-				os.Setenv("MOW_VALUE", "xxx")
-				return c.Ints(IntsArg{Name: "ARG", Value: []int{1, 2}, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test"},
-			expected: []int(nil), //TODO: this is bad and you should feel bad
-		},
-		{
-			desc: "Ints Arg, env set, set by user",
-			config: func(c *Cli) interface{} {
-				c.Spec = "ARG..."
-				os.Setenv("MOW_VALUE", "42")
-				return c.Ints(IntsArg{Name: "ARG", Value: []int{1, 2}, EnvVar: "MOW_VALUE"})
-			},
-			args:     []string{"test", "5", "7"},
-			expected: []int{5, 7},
-		},
-	}
-
-	for _, cas := range cases {
-		t.Run(cas.desc, func(t *testing.T) {
-			t.Log(cas.desc)
-
-			app := App("test", "")
-			app.ErrorHandling = flag.ContinueOnError
-
-			pointer := cas.config(app)
-
-			called := false
-			app.Action = func() {
-				called = true
-			}
-
-			require.NoError(t,
-				app.Run(cas.args))
-
-			typ := reflect.TypeOf(pointer)
-			if typ.Kind() != reflect.Ptr {
-				t.Fatalf("config func did not return a pointer")
-			}
-			actualValue := reflect.ValueOf(pointer).Elem().Interface()
-
-			require.True(t, called, "action should have been called")
-			require.Equal(t, cas.expected, actualValue)
-		})
-	}
 }
 
 func TestCommandAction(t *testing.T) {
@@ -2311,20 +1775,6 @@ func exitShouldNotCalled(t *testing.T) func() {
 
 func suppressOutput() func() {
 	return captureAndRestoreOutput(nil, nil)
-}
-
-func setAndRestoreEnv(env map[string]string) func() {
-	backup := map[string]string{}
-	for k, v := range env {
-		backup[k] = os.Getenv(k)
-		os.Setenv(k, v)
-	}
-
-	return func() {
-		for k, v := range backup {
-			os.Setenv(k, v)
-		}
-	}
 }
 
 func captureAndRestoreOutput(out, err *string) func() {

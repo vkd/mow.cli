@@ -47,9 +47,6 @@ func (om *options) try(args []string, c *ParseContext) (bool, []string) {
 			continue
 		}
 		if ok, nargs := (&opt{theOne: o, index: om.index}).Match(args, c); ok {
-			if o.ValueSetFromEnv {
-				c.ExcludedOpts[o] = struct{}{}
-			}
 			return true, nargs
 		}
 	}
