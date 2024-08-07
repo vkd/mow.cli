@@ -9,7 +9,7 @@ type Container struct {
 	Name           string
 	Desc           string
 	Names          []string
-	HideValue      bool
+	HideDefault    bool
 	ValueSetByUser *bool
 	Value          flag.Value
 	DefaultValue   string

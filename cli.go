@@ -55,10 +55,10 @@ printing the version string via the CLI.
 */
 func (cli *Cli) Version(name, version string) {
 	cli.Bool(BoolOpt{
-		Name:      name,
-		Value:     false,
-		Desc:      "Show the version and exit",
-		HideValue: true,
+		Name:        name,
+		Value:       false,
+		Desc:        "Show the version and exit",
+		HideDefault: true,
 	})
 	names := mkOptStrs(name)
 	option := cli.optionsIdx[names[0]]

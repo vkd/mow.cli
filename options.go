@@ -19,7 +19,7 @@ type BoolOpt struct {
 	// The option's initial value
 	Value bool
 	// A boolean to display or not the current value of the option in the help message
-	HideValue bool
+	HideDefault bool
 	// Set to true if this option was set by the user (as opposed to being set from env or not set at all)
 	SetByUser *bool
 	// Hide this option in the help messages
@@ -43,7 +43,7 @@ type StringOpt struct {
 	// The option's initial value
 	Value string
 	// A boolean to display or not the current value of the option in the help message
-	HideValue bool
+	HideDefault bool
 	// Set to true if this option was set by the user (as opposed to being set from env or not set at all)
 	SetByUser *bool
 	// Hide this option in the help messages
@@ -67,7 +67,7 @@ type IntOpt struct {
 	// The option's initial value
 	Value int
 	// A boolean to display or not the current value of the option in the help message
-	HideValue bool
+	HideDefault bool
 	// Set to true if this option was set by the user (as opposed to being set from env or not set at all)
 	SetByUser *bool
 	// Hide this option in the help messages
@@ -91,7 +91,7 @@ type Float64Opt struct {
 	// The option's initial value
 	Value float64
 	// A boolean to display or not the current value of the option in the help message
-	HideValue bool
+	HideDefault bool
 	// Set to true if this option was set by the user (as opposed to being set from env or not set at all)
 	SetByUser *bool
 	// Hide this option in the help messages
@@ -115,7 +115,7 @@ type StringsOpt struct {
 	// The option's initial value
 	Value []string
 	// A boolean to display or not the current value of the option in the help message
-	HideValue bool
+	HideDefault bool
 	// Set to true if this option was set by the user (as opposed to being set from env or not set at all)
 	SetByUser *bool
 	// Hide this option in the help messages
@@ -139,7 +139,7 @@ type IntsOpt struct {
 	// The option's initial value
 	Value []int
 	// A boolean to display or not the current value of the option in the help message
-	HideValue bool
+	HideDefault bool
 	// Set to true if this option was set by the user (as opposed to being set from env or not set at all)
 	SetByUser *bool
 	// Hide this option in the help messages
@@ -164,7 +164,7 @@ type Floats64Opt struct {
 	// The option's initial value
 	Value []float64
 	// A boolean to display or not the current value of the option in the help message
-	HideValue bool
+	HideDefault bool
 	// Set to true if this option was set by the user (as opposed to being set from env or not set at all)
 	SetByUser *bool
 	// Hide this option in the help messages
@@ -189,7 +189,7 @@ type VarOpt struct {
 	// A value implementing the flag.Value type (will hold the final value)
 	Value flag.Value
 	// A boolean to display or not the current value of the option in the help message
-	HideValue bool
+	HideDefault bool
 	// Set to true if this option was set by the user (as opposed to being set from env or not set at all)
 	SetByUser *bool
 	// Hide this option in the help messages

@@ -894,44 +894,44 @@ func TestHelpMessage(t *testing.T) {
 			// Options
 			app.Bool(BoolOpt{Name: "b bool1 u uuu", Value: false, Desc: "Bool Option 1"})
 			app.Bool(BoolOpt{Name: "bool2", Value: true, Desc: "Bool Option 2"})
-			app.Bool(BoolOpt{Name: "d", Value: true, Desc: "Bool Option 3", HideValue: true})
+			app.Bool(BoolOpt{Name: "d", Value: true, Desc: "Bool Option 3", HideDefault: true})
 
 			app.String(StringOpt{Name: "s str1", Value: "", Desc: "String Option 1"})
 			app.String(StringOpt{Name: "str2", Value: "a value", Desc: "String Option 2"})
-			app.String(StringOpt{Name: "v", Value: "another value", Desc: "String Option 3", HideValue: true})
+			app.String(StringOpt{Name: "v", Value: "another value", Desc: "String Option 3", HideDefault: true})
 
 			app.Int(IntOpt{Name: "i int1", Value: 0})
 			app.Int(IntOpt{Name: "int2", Value: 1, Desc: "Int Option 2"})
-			app.Int(IntOpt{Name: "k", Value: 1, Desc: "Int Option 3", HideValue: true})
+			app.Int(IntOpt{Name: "k", Value: 1, Desc: "Int Option 3", HideDefault: true})
 
 			app.Strings(StringsOpt{Name: "x strs1", Value: nil, Desc: "Strings Option 1"})
 			app.Strings(StringsOpt{Name: "strs2", Value: []string{"value1", "value2"}, Desc: "Strings Option 2"})
-			app.Strings(StringsOpt{Name: "z", Value: []string{"another value"}, Desc: "Strings Option 3", HideValue: true})
+			app.Strings(StringsOpt{Name: "z", Value: []string{"another value"}, Desc: "Strings Option 3", HideDefault: true})
 
 			app.Ints(IntsOpt{Name: "q ints1", Value: nil, Desc: "Ints Option 1"})
 			app.Ints(IntsOpt{Name: "ints2", Value: []int{1, 2, 3}, Desc: "Ints Option 2"})
-			app.Ints(IntsOpt{Name: "j", Value: []int{1}, Desc: "Ints Option 3", HideValue: true})
+			app.Ints(IntsOpt{Name: "j", Value: []int{1}, Desc: "Ints Option 3", HideDefault: true})
 
 			// Args
 			app.Bool(BoolArg{Name: "BOOL1", Value: false, Desc: "Bool Argument 1"})
 			app.Bool(BoolArg{Name: "BOOL2", Value: true, Desc: "Bool Argument 2"})
-			app.Bool(BoolArg{Name: "BOOL3", Value: true, Desc: "Bool Argument 3", HideValue: true})
+			app.Bool(BoolArg{Name: "BOOL3", Value: true, Desc: "Bool Argument 3", HideDefault: true})
 
 			app.String(StringArg{Name: "STR1", Value: "", Desc: "String Argument 1"})
 			app.String(StringArg{Name: "STR2", Value: "a value", Desc: "String Argument 2"})
-			app.String(StringArg{Name: "STR3", Value: "another value", Desc: "String Argument 3", HideValue: true})
+			app.String(StringArg{Name: "STR3", Value: "another value", Desc: "String Argument 3", HideDefault: true})
 
 			app.Int(IntArg{Name: "INT1", Value: 0, Desc: "Int Argument 1"})
 			app.Int(IntArg{Name: "INT2", Value: 1, Desc: "Int Argument 2"})
-			app.Int(IntArg{Name: "INT3", Value: 1, Desc: "Int Argument 3", HideValue: true})
+			app.Int(IntArg{Name: "INT3", Value: 1, Desc: "Int Argument 3", HideDefault: true})
 
 			app.Strings(StringsArg{Name: "STRS1", Value: nil, Desc: "Strings Argument 1"})
 			app.Strings(StringsArg{Name: "STRS2", Value: []string{"value1", "value2"}})
-			app.Strings(StringsArg{Name: "STRS3", Value: []string{"another value"}, Desc: "Strings Argument 3", HideValue: true})
+			app.Strings(StringsArg{Name: "STRS3", Value: []string{"another value"}, Desc: "Strings Argument 3", HideDefault: true})
 
 			app.Ints(IntsArg{Name: "INTS1", Value: nil, Desc: "Ints Argument 1"})
 			app.Ints(IntsArg{Name: "INTS2", Value: []int{1, 2, 3}, Desc: "Ints Argument 2"})
-			app.Ints(IntsArg{Name: "INTS3", Value: []int{1}, Desc: "Ints Argument 3", HideValue: true})
+			app.Ints(IntsArg{Name: "INTS3", Value: []int{1}, Desc: "Ints Argument 3", HideDefault: true})
 
 			app.Command("command1", "command1 description", func(cmd *Cmd) {})
 			app.Command("command2", "command2 description", func(cmd *Cmd) {})
